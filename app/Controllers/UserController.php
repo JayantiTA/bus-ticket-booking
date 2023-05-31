@@ -8,9 +8,14 @@ class UserController extends BaseController
 {
   protected UserModel $userModel;
 
-  public function index()
+  public function registerPage()
   {
-    return view('welcome_message');
+    return view('register');
+  }
+
+  public function loginPage()
+  {
+    return view('login');
   }
 
   public function __construct()
@@ -20,34 +25,53 @@ class UserController extends BaseController
 
   public function loginUser()
   {
-    $email = $this->request->getVar('email');
-    $password = $this->request->getVar('password');
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
     $user = $this->userModel->getUserByEmail($email);
-    if ($user) {
-      if (password_verify($password, $user['password'])) {
-        // $this->session->set('user', $user);
-        unset($user['password']);
-        return $this->response->setJSON($user);
-      } else {
-        return $this->response->setJSON(['message' => 'Password is incorrect']);
-      }
-    } else {
-      return $this->response->setJSON(['message' => 'User not found']);
+    if ($user && password_verify($password, $user['password'])) {
+      $this->session->set([
+        'user_id' => $user['id'],
+        'email' => $user['email'],
+        'name' => $user['name'],
+        'role_id' => $user['role_id'],
+      ]);
+      unset($user['password']);
+      return view('login', [
+        'success' => true,
+        'message' => 'Login success',
+      ]);
     }
+    return view('login', [
+      'success' => false,
+      'message' => 'Login failed',
+    ]);
   }
 
   public function registerUser()
   {
-    $data = $this->request->getJSON();
-    $user = $this->userModel->getUserByEmail($data->email);
-    if ($user) {
-      return $this->response->setJSON(['message' => 'User already exists']);
-    } else {
-      $data->password = password_hash($data->password, PASSWORD_DEFAULT);
-      $this->userModel->createUser($data);
-      return $this->response->setJSON($data);
+    if ($_POST['password'] !== $_POST['confirm_password']) {
+      return view('register', [
+        'success' => false,
+        'message' => 'Password confirmation does not match'
+      ]);
     }
+    $user = $this->userModel->getUserByEmail($_POST['email']);
+    if ($user) {
+      $data = [
+        'success' => false,
+        'message' => 'Email already exists'
+      ];
+    } else {
+      $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+      $_POST['role_id'] = 2;
+      $this->userModel->createUser($_POST);
+      $data = [
+        'success' => true,
+        'message' => 'Register success'
+      ];
+    }
+    return view('register', $data);
   }
 
   public function logoutUser()

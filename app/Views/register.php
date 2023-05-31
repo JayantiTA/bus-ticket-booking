@@ -9,29 +9,37 @@
         <img src="/bus.jpg" alt="bus" class="img-fluid">
       </div>
       <div class=" col-md-6">
-        <h1 class="text-center my-5">Register</h1>
-        <div class=" mb-3">
-          <label for="email" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="email" placeholder="name@example.com">
-        </div>
-        <div class=" mb-3">
-          <label for="email" class="form-label">Name</label>
-          <input type="email" class="form-control" id="email" placeholder="name@example.com">
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="">
-        </div>
-        <div class="mb-3">
-          <label for="confirm_password" class="form-label">Confirm Password</label>
-          <input type="password" class="form-control" id="confirm_password" placeholder="">
-        </div>
-        <p>Already have an account?
-          <a href="/login">Login</a>
-        </p>
-        <div class="d-flex flex-row-reverse mx-3 my-3">
-          <button class="btn btn-primary btn-lg" type="submit">Register</button>
-        </div>
+        <form action="<?= base_url('register') ?>" method="POST">
+          <h1 class="text-center my-5">Register</h1>
+
+          <?php if (isset($success)) : ?>
+            <div class="alert alert-<?php echo $success ? "success" : "danger" ?> " role="alert">
+              <?php echo $message ?>
+            </div>
+          <?php endif; ?>
+          <div class=" mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com">
+          </div>
+          <div class=" mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Your Full Name">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input type="password" name="confirm_password" class="form-control" id="confirm_password" placeholder="">
+          </div>
+          <p>Already have an account?
+            <a href="<?= base_url('login') ?>">Login</a>
+          </p>
+          <div class="d-flex flex-row-reverse mx-3 my-3">
+            <button class="btn btn-primary btn-lg" type="submit">Register</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
