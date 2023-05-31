@@ -41,7 +41,7 @@ class BusController extends BaseController
 
   public function getAvailableBusesByDepartureTime()
   {
-    $data = $this->request->getJSON();
+    $data = $this->request->getVar();
     $buses = $this->busModel->getBusesByDepartureTime($data->departure_time);
     for ($i = 0; $i < count($buses); $i++) {
       $seats = $this->seatModel->getSeatsByBusIdAndAvailable($buses[$i]->id);
@@ -58,24 +58,25 @@ class BusController extends BaseController
     }
   }
 
-  public function updateBus()
+  public function updateBus($id)
   {
     $data = $this->request->getJSON();
-    $bus = $this->busModel->getBus($data->id);
+    $bus = $this->busModel->getBus($id);
     if ($bus) {
-      $this->busModel->updateBus($data->id, $data);
-      return $this->response->setJSON($data);
+      $this->busModel->updateBus($id, $data);
+      $updatedBus = $this->busModel->getBus($id);
+      return $this->response->setJSON($updatedBus);
     } else {
       return $this->response->setJSON(['message' => 'Bus not found']);
     }
   }
 
-  public function deleteBus()
+  public function deleteBus($id)
   {
     $data = $this->request->getJSON();
-    $bus = $this->busModel->getBus($data->id);
+    $bus = $this->busModel->getBus($id);
     if ($bus) {
-      $this->busModel->deleteBus($data->id);
+      $this->busModel->deleteBus($id);
       return $this->response->setJSON(['message' => 'Bus deleted successfully']);
     } else {
       return $this->response->setJSON(['message' => 'Bus not found']);

@@ -54,24 +54,24 @@ class BookingController extends BaseController
     }
   }
 
-  public function updateBooking()
+  public function updateBooking($id)
   {
     $data = $this->request->getJSON();
-    $bookings = $this->bookingModel->getBooking($data->id);
-    if ($bookings) {
-      $this->bookingModel->updateBooking($data->id, $data);
-      return $this->response->setJSON($data);
+    $booking = $this->bookingModel->getBooking($id);
+    if ($booking) {
+      $this->bookingModel->updateBooking($id, $data);
+      $updatedBooking = $this->bookingModel->getBooking($id);
+      return $this->response->setJSON($updatedBooking);
     } else {
       return $this->response->setJSON(['message' => 'Booking not found']);
     }
   }
 
-  public function deleteBooking()
+  public function deleteBooking($id)
   {
-    $data = $this->request->getJSON();
-    $bookings = $this->bookingModel->getBooking($data->id);
+    $bookings = $this->bookingModel->getBooking($id);
     if ($bookings) {
-      $this->bookingModel->deleteBooking($data->id);
+      $this->bookingModel->deleteBooking($id);
       return $this->response->setJSON(['message' => 'Booking deleted successfully']);
     } else {
       return $this->response->setJSON(['message' => 'Booking not found']);

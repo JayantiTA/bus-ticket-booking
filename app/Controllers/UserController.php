@@ -82,7 +82,8 @@ class UserController extends BaseController
     $user = $this->userModel->getUser($id);
     if ($user) {
       $this->userModel->updateUser($id, $data);
-      return $this->response->setJSON(['message' => 'User updated']);
+      unset($user->password);
+      return $this->response->setJSON($user);
     } else {
       return $this->response->setJSON(['message' => 'User not found']);
     }
@@ -90,7 +91,6 @@ class UserController extends BaseController
 
   public function deleteUser($id)
   {
-    $data = $this->request->getJSON();
     $user = $this->userModel->getUser($id);
     if ($user) {
       $this->userModel->deleteUser($id);

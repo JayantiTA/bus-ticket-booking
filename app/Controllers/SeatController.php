@@ -35,24 +35,25 @@ class SeatController extends BaseController
     }
   }
 
-  public function updateSeat()
+  public function updateSeat($id)
   {
     $data = $this->request->getJSON();
-    $seat = $this->seatModel->getSeat($data->id);
+    $seat = $this->seatModel->getSeat($id);
     if ($seat) {
-      $this->seatModel->updateSeat($data->id, $data);
-      return $this->response->setJSON($data);
+      $this->seatModel->updateSeat($id, $data);
+      $updatedSeat = $this->seatModel->getSeat($id);
+      return $this->response->setJSON($updatedSeat);
     } else {
       return $this->response->setJSON(['message' => 'Seat not found']);
     }
   }
 
-  public function deleteSeat()
+  public function deleteSeat($id)
   {
     $data = $this->request->getJSON();
-    $seat = $this->seatModel->getSeat($data->id);
+    $seat = $this->seatModel->getSeat($id);
     if ($seat) {
-      $this->seatModel->deleteSeat($data->id);
+      $this->seatModel->deleteSeat($id);
       return $this->response->setJSON(['message' => 'Seat deleted']);
     } else {
       return $this->response->setJSON(['message' => 'Seat not found']);
