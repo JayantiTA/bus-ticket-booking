@@ -20,11 +20,14 @@ class UserController extends BaseController
 
   public function loginUser()
   {
-    $data = $this->request->getJSON();
-    $user = $this->userModel->getUserByEmail($data->email);
+    $email = $this->request->getVar('email');
+    $password = $this->request->getVar('password');
+
+    $user = $this->userModel->getUserByEmail($email);
     if ($user) {
-      if (password_verify($data->password, $user->password)) {
+      if (password_verify($password, $user['password'])) {
         // $this->session->set('user', $user);
+        unset($user['password']);
         return $this->response->setJSON($user);
       } else {
         return $this->response->setJSON(['message' => 'Password is incorrect']);
@@ -56,6 +59,9 @@ class UserController extends BaseController
   public function getUsers()
   {
     $users = $this->userModel->getUsers();
+    for ($i = 0; $i < count($users); $i++) {
+      unset($users[$i]['password']);
+    }
     return $this->response->setJSON($users);
   }
 
@@ -63,6 +69,7 @@ class UserController extends BaseController
   {
     $user = $this->userModel->getUser($id);
     if ($user) {
+      unset($user['password']);
       return $this->response->setJSON($user);
     } else {
       return $this->response->setJSON(['message' => 'User not found']);
