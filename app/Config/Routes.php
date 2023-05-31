@@ -34,6 +34,8 @@ $routes->get('users', 'UserController::getUsers');
 $routes->get('login', 'UserController::loginUser');
 $routes->post('register', 'UserController::registerUser');
 $routes->get('user/(:num)', 'UserController::getUser/$1');
+$routes->post('user/edit/(:num)', 'UserController::updateUser/$1');
+$routes->post('user/delete/(:num)', 'UserController::deleteUser/$1');
 
 /*
  * --------------------------------------------------------------------

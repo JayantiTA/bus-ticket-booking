@@ -76,24 +76,24 @@ class UserController extends BaseController
     }
   }
 
-  public function updateUser()
+  public function updateUser($id)
   {
     $data = $this->request->getJSON();
-    $user = $this->userModel->getUser($data->id);
+    $user = $this->userModel->getUser($id);
     if ($user) {
-      $this->userModel->updateUser($data->id, $data);
-      return $this->response->setJSON($data);
+      $this->userModel->updateUser($id, $data);
+      return $this->response->setJSON(['message' => 'User updated']);
     } else {
       return $this->response->setJSON(['message' => 'User not found']);
     }
   }
 
-  public function deleteUser()
+  public function deleteUser($id)
   {
     $data = $this->request->getJSON();
-    $user = $this->userModel->getUser($data->id);
+    $user = $this->userModel->getUser($id);
     if ($user) {
-      $this->userModel->deleteUser($data->id);
+      $this->userModel->deleteUser($id);
       return $this->response->setJSON(['message' => 'User deleted']);
     } else {
       return $this->response->setJSON(['message' => 'User not found']);
