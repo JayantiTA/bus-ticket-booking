@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 
-class User extends BaseController
+class UserController extends BaseController
 {
   protected UserModel $userModel;
 
@@ -24,7 +24,7 @@ class User extends BaseController
     $user = $this->userModel->getUserByEmail($data->email);
     if ($user) {
       if (password_verify($data->password, $user->password)) {
-        $this->session->set('user', $user);
+        // $this->session->set('user', $user);
         return $this->response->setJSON($user);
       } else {
         return $this->response->setJSON(['message' => 'Password is incorrect']);

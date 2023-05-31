@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\BusModel;
 use App\Models\SeatModel;
 
-class Bus extends BaseController
+class BusController extends BaseController
 {
   protected BusModel $busModel;
   protected SeatModel $seatModel;

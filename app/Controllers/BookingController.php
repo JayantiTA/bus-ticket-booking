@@ -6,7 +6,7 @@ use App\Models\BookingModel;
 use App\Models\BusModel;
 use App\Models\SeatModel;
 
-class Booking extends BaseController
+class BookingController extends BaseController
 {
   protected BookingModel $bookingModel;
   protected BusModel $busModel;

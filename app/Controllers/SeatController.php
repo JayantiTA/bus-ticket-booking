@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\SeatModel;
 
-class Seat extends BaseController
+class SeatController extends BaseController
 {
   protected SeatModel $seatModel;
 
