@@ -12,7 +12,7 @@ class BusController extends BaseController
 
   public function index()
   {
-    return view('welcome_message');
+    return view('discover');
   }
 
   public function __construct()
@@ -39,23 +39,32 @@ class BusController extends BaseController
     }
   }
 
-  public function getAvailableBusesByDepartureTime()
+  public function searchPage()
   {
-    $data = $this->request->getVar();
-    $buses = $this->busModel->getBusesByDepartureTime($data->departure_time);
+    return view('discover');
+  }
+
+  public function searchBuses()
+  {
+    $departure_time = $_POST['departure_time'];
+    $departure_city = $_POST['departure_city'];
+    $destination_city = $_POST['destination_city'];
+    $buses = $this->busModel->getBusesByFilters($departure_time, $departure_city, $destination_city);
+
     for ($i = 0; $i < count($buses); $i++) {
-      $seats = $this->seatModel->getSeatsByBusIdAndAvailable($buses[$i]->id);
+      $seats = $this->seatModel->getSeatsByBusIdAndAvailable($buses[$i]['id']);
       if ($seats) {
-        $buses[$i]->available_seats = count($seats);
+        $buses[$i]['available_seats'] = count($seats);
       } else {
-        $buses[$i]->available_seats = 0;
+        $buses[$i]['available_seats'] = 0;
       }
     }
-    if ($buses) {
-      return $this->response->setJSON($buses);
-    } else {
-      return $this->response->setJSON(['message' => 'No buses found']);
-    }
+    $data = [
+      'success' => true,
+      'date' => $departure_time,
+      'buses' => $buses
+    ];
+    return view('available_buses', $data);
   }
 
   public function updateBus($id)

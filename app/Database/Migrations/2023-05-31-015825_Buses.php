@@ -38,10 +38,6 @@ class Buses extends Migration
                 'type' => 'INT',
                 'constraint' => 11,
             ],
-            'available_seats' => [
-                'type' => 'INT',
-                'constraint' => 11,
-            ],
             'fare' => [
                 'type' => 'INT',
                 'constraint' => 11,

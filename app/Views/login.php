@@ -25,7 +25,7 @@
             <input type="password" name="password" class="form-control" id="password" placeholder="">
           </div>
           <p>Do not have any account?
-            <a href="/register">Register</a>
+            <a href="<?= base_url('register') ?>">Register</a>
           </p>
           <div class="d-flex flex-row-reverse mx-3 my-5">
             <button class="btn btn-primary btn-lg" type="submit">Login</button>

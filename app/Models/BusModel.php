@@ -24,6 +24,18 @@ class BusModel extends Model
     return $this->where(['id' => $id])->first();
   }
 
+  public function getBusesByFilters($departure_date, $source, $destination)
+  {
+    $results = $this->where(['source' => $source, 'destination' => $destination])->findAll();
+    $filtered_results = [];
+    foreach ($results as $result) {
+      if (date('Y-m-d', strtotime($result['departure_time'])) == $departure_date) {
+        array_push($filtered_results, $result);
+      }
+    }
+    return $filtered_results;
+  }
+
   public function getBusesByDepartureTime($departure_time)
   {
     return $this->where(['departure_time' => $departure_time])->findAll();

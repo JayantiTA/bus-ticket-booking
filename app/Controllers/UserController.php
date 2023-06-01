@@ -77,7 +77,11 @@ class UserController extends BaseController
   public function logoutUser()
   {
     $this->session->destroy();
-    return $this->response->setJSON(['message' => 'User logged out']);
+    $data = [
+      'success' => true,
+      'message' => 'User logged out'
+    ];
+    return view('register', $data);
   }
 
   public function getUsers()

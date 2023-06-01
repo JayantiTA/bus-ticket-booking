@@ -35,6 +35,10 @@ $routes->get('/register', 'UserController::registerPage');
 $routes->post('/register', 'UserController::registerUser');
 $routes->get('/login', 'UserController::loginPage');
 $routes->post('/login', 'UserController::loginUser');
+$routes->post('/logout', 'UserController::logoutUser');
+
+$routes->get('/discover', 'BusController::SearchPage');
+$routes->post('/discover', 'BusController::SearchBuses');
 
 $routes->get('/users', 'UserController::getUsers');
 $routes->get('user/(:num)', 'UserController::getUser/$1');
