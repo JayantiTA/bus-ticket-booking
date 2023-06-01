@@ -40,10 +40,10 @@ $routes->post('/logout', 'UserController::logoutUser');
 $routes->get('/discover', 'BusController::SearchPage');
 $routes->post('/discover', 'BusController::SearchBuses');
 
-$routes->get('/users', 'UserController::getUsers');
-$routes->get('user/(:num)', 'UserController::getUser/$1');
-$routes->post('user/edit/(:num)', 'UserController::updateUser/$1');
-$routes->post('user/delete/(:num)', 'UserController::deleteUser/$1');
+$routes->get('admin/user', 'UserController::getUsers');
+$routes->post('admin/user/create', 'UserController::createUser');
+$routes->post('admin/user/update/(:num)', 'UserController::updateUser/$1');
+$routes->post('admin/user/delete/(:num)', 'UserController::deleteUser/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

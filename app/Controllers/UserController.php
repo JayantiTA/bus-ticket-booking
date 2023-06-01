@@ -85,45 +85,64 @@ class UserController extends BaseController
 
   public function getUsers()
   {
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $users = $this->userModel->getUsers();
     for ($i = 0; $i < count($users); $i++) {
       unset($users[$i]['password']);
     }
-    return $this->response->setJSON($users);
+    $data['users'] = $users;
+    $data['success'] = $this->session->getFlashdata('success');
+    $data['message'] = $this->session->getFlashdata('message');
+    return view('admin/user', $data);
   }
 
-  public function getUser($id)
+  public function createUser()
   {
-    $user = $this->userModel->getUser($id);
-    if ($user) {
-      unset($user['password']);
-      return $this->response->setJSON($user);
-    } else {
-      return $this->response->setJSON(['message' => 'User not found']);
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
     }
+
+    $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $this->userModel->createUser($_POST);
+    return redirect()->to('/admin/user')->with('success', true)->with('message', 'Create User Success');
   }
 
   public function updateUser($id)
   {
-    $data = $this->request->getJSON();
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $user = $this->userModel->getUser($id);
     if ($user) {
-      $this->userModel->updateUser($id, $data);
-      unset($user->password);
-      return $this->response->setJSON($user);
-    } else {
-      return $this->response->setJSON(['message' => 'User not found']);
+      $this->userModel->updateUser($id, $_POST);
+      return redirect()->to('/admin/user')->with('success', true)->with('message', 'Update User Success');
     }
+    return redirect()->to('/admin/user')->with('success', false)->with('message', 'Update User Failed');
   }
 
   public function deleteUser($id)
   {
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $user = $this->userModel->getUser($id);
     if ($user) {
       $this->userModel->deleteUser($id);
-      return $this->response->setJSON(['message' => 'User deleted']);
-    } else {
-      return $this->response->setJSON(['message' => 'User not found']);
+      return redirect()->to('/admin/user')->with('success', true)->with('message', 'Delete User Success');
     }
+    return redirect()->to('/admin/user')->with('success', false)->with('message', 'Delete User Failed');
   }
 }

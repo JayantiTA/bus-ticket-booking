@@ -13,8 +13,9 @@
           <h1 class="text-center my-5">Register</h1>
 
           <?php if (isset($success)) : ?>
-            <div class="alert alert-<?php echo $success ? "success" : "danger" ?> " role="alert">
+            <div class="alert alert-dismissable alert-<?php echo $success ? "success" : "danger" ?> " role="alert">
               <?php echo $message ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
           <?php endif; ?>
           <div class=" mb-3">
