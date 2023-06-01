@@ -27,8 +27,9 @@ class Users extends Migration
                 'constraint' => 255,
             ],
             'role_id' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'type' => 'ENUM',
+                'constraint' => ['admin', 'user'],
+                'default' => 'user',
             ],
             'created_at' => [
                 'type' => 'DATETIME',

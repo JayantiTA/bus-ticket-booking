@@ -64,7 +64,6 @@ class UserController extends BaseController
       ];
     } else {
       $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-      $_POST['role_id'] = 2;
       $this->userModel->createUser($_POST);
       $data = [
         'success' => true,
