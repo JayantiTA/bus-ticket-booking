@@ -151,9 +151,29 @@
                                     </div>
                                 </div>
 
-                                <form action=" <?= base_url('admin/bus/delete/' . $bus['id']) ?>" method="POST" class="d-inline">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?= $bus['id'] ?>">
+                                    Delete
+                                </button>
+                                <!-- Modal Delete -->
+                                <div class="modal fade" id="deleteModal<?= $bus['id'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?= $bus['id'] ?>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel<?= $bus['id'] ?>">Delete Bus</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure want to delete this bus?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form action=" <?= base_url('admin/bus/delete/' . $bus['id']) ?>" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
