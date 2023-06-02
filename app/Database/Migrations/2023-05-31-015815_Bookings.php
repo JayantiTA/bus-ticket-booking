@@ -26,6 +26,10 @@ class Bookings extends Migration
                 'type' => 'INT',
                 'constraint' => 11,
             ],
+            'departure_time' => [
+                'type' => 'DATETIME',
+                'null' => false,
+            ],
             'status' => [
                 'type' => 'ENUM',
                 'constraint' => ['pending', 'approved', 'rejected'],

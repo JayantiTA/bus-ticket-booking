@@ -28,11 +28,11 @@ class Buses extends Migration
             ],
             'departure_time' => [
                 'type' => 'TIME',
-                'null' => true,
+                'null' => false,
             ],
             'arrival_time' => [
                 'type' => 'TIME',
-                'null' => true,
+                'null' => false,
             ],
             'seats' => [
                 'type' => 'INT',
