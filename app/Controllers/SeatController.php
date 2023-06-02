@@ -2,10 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Models\BookingModel;
 use App\Models\SeatModel;
 
 class SeatController extends BaseController
 {
+  protected BookingModel $bookingModel;
   protected SeatModel $seatModel;
 
   public function index()
@@ -15,6 +17,7 @@ class SeatController extends BaseController
 
   public function __construct()
   {
+    $this->bookingModel = new BookingModel();
     $this->seatModel = new SeatModel();
   }
 
@@ -33,6 +36,36 @@ class SeatController extends BaseController
     } else {
       return $this->response->setJSON(['message' => 'Seat not found']);
     }
+  }
+
+  public function getSeatsPage($id)
+  {
+    if (!$this->session->get('user_id')) {
+      return view('login');
+    }
+    $date = $_POST['date'];
+    $seats = $this->seatModel->getSeatsByBusId($id);
+    $bookings = $this->bookingModel->getBookingsByBusIdAndDate($id, $date);
+    $available_seats = [];
+    $booked_seat_ids = [];
+
+    foreach ($bookings as $booking) {
+      array_push($booked_seat_ids, $booking['id']);
+    }
+
+    for ($i = 0; $i < count($seats); $i++) {
+      if (!in_array($seats[$i]['id'], $booked_seat_ids)) {
+        array_push($available_seats, $seats[$i]);
+      }
+    }
+
+    $data = [
+      'success' => true,
+      'bus_id' => $id,
+      'date' => $date,
+      'seats' => $available_seats
+    ];
+    return view('book_seat', $data);
   }
 
   public function updateSeat($id)

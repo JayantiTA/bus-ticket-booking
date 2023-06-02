@@ -22,8 +22,8 @@
           </div>
         </div>
         <div class="my-3">
-          <label for="departure_time" class="form-label">Departure Time</label>
-          <input type="date" name="departure_time" class="form-control" id="departure_time" placeholder="">
+          <label for="departure_date" class="form-label">Departure Date</label>
+          <input type="date" name="departure_date" class="form-control" id="departure_date" placeholder="">
         </div>
         <div class="d-grid gap-4 d-md-flex justify-content-center my-4">
           <button class="btn btn-primary btn-lg px-5" type="submit">Search</button>

@@ -26,7 +26,7 @@ class Bookings extends Migration
                 'type' => 'INT',
                 'constraint' => 11,
             ],
-            'departure_time' => [
+            'departure_date' => [
                 'type' => 'DATETIME',
                 'null' => false,
             ],

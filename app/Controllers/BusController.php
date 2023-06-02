@@ -3,11 +3,13 @@
 namespace App\Controllers;
 
 use App\Models\BusModel;
+use App\Models\BookingModel;
 use App\Models\SeatModel;
 
 class BusController extends BaseController
 {
   protected BusModel $busModel;
+  protected BookingModel $bookingModel;
   protected SeatModel $seatModel;
 
   public function index()
@@ -18,6 +20,7 @@ class BusController extends BaseController
   public function __construct()
   {
     $this->busModel = new BusModel();
+    $this->bookingModel = new BookingModel();
     $this->seatModel = new SeatModel();
   }
 
@@ -52,22 +55,28 @@ class BusController extends BaseController
 
   public function searchBuses()
   {
-    $departure_time = $_POST['departure_time'];
+    $departure_date = $_POST['departure_date'];
     $departure_city = $_POST['departure_city'];
     $destination_city = $_POST['destination_city'];
-    $buses = $this->busModel->getBusesByFilters($departure_time, $departure_city, $destination_city);
+    $buses = $this->busModel->getBusesByFilters($departure_city, $destination_city);
+    $filtered_buses = [];
+    $date = \DateTime::createFromFormat('Y-m-d', $departure_date);
 
     for ($i = 0; $i < count($buses); $i++) {
-      $seats = $this->seatModel->getSeatsByBusIdAndAvailable($buses[$i]['id']);
-      if ($seats) {
-        $buses[$i]['available_seats'] = count($seats);
-      } else {
-        $buses[$i]['available_seats'] = 0;
+      $bookings = $this->bookingModel->getBookingsByBusIdAndDate($buses[$i]['id'], $departure_date);
+      $buses[$i]['available_seats'] = $buses[$i]['seats'] - count($bookings);
+      if ($buses[$i]['available_seats']) {
+        array_push($filtered_buses, $buses[$i]);
       }
+      $buses[$i]['fare'] = 'Rp. ' . number_format($buses[$i]['fare'], 0, ',', '.');
+      $buses[$i]['departure_time'] = \DateTime::createFromFormat('H:i:s', $buses[$i]['departure_time'])->format('H:i');
+      $buses[$i]['arrival_time'] = \DateTime::createFromFormat('H:i:s', $buses[$i]['arrival_time'])->format('H:i');
+      $buses[$i]['arrival_date'] = $date->modify('+' . $buses[$i]['day'] . ' day')->format('d F Y');
     }
+
     $data = [
       'success' => true,
-      'date' => $departure_time,
+      'date' => $departure_date,
       'buses' => $buses
     ];
     return view('available_buses', $data);

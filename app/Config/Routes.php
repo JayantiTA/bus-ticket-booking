@@ -30,15 +30,21 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->get('contact', 'Home::contactPage');
+$routes->post('contact', 'Home::contactLink');
 
 $routes->get('/register', 'UserController::registerPage');
 $routes->post('/register', 'UserController::registerUser');
 $routes->get('/login', 'UserController::loginPage');
 $routes->post('/login', 'UserController::loginUser');
-$routes->post('/logout', 'UserController::logoutUser');
+$routes->get('/logout', 'UserController::logoutUser');
 
-$routes->get('/discover', 'BusController::SearchPage');
-$routes->post('/discover', 'BusController::SearchBuses');
+$routes->get('/discover', 'BusController::searchPage');
+$routes->post('/discover', 'BusController::searchBuses');
+$routes->post('/seats/(:num)', 'SeatController::getSeatsPage/$1');
+$routes->post('/book/(:num)', 'BookingController::createBookingPage/$1');
+$routes->post('/pay/(:num)', 'BookingController::createBooking/$1');
+$routes->get('bookings', 'BookingController::getBookingsPage');
 
 $routes->get('admin/user', 'UserController::getUsers');
 $routes->post('admin/user/create', 'UserController::createUser');

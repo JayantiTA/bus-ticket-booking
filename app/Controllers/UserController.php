@@ -37,7 +37,7 @@ class UserController extends BaseController
         'role_id' => $user['role_id'],
       ]);
       unset($user['password']);
-      return view('login', [
+      return view('discover', [
         'success' => true,
         'message' => 'Login success',
       ]);
@@ -80,7 +80,7 @@ class UserController extends BaseController
       'success' => true,
       'message' => 'User logged out'
     ];
-    return view('register', $data);
+    return redirect()->to('/discover')->with('success', true)->with('message', 'Logout Success');
   }
 
   public function getUsers()

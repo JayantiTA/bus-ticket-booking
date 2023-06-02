@@ -9,7 +9,7 @@ class BusModel extends Model
   protected $table = 'buses';
   protected $primaryKey = 'id';
   protected $allowedFields = [
-    'name', 'source', 'destination', 'departure_time', 'arrival_time',
+    'name', 'source', 'destination', 'departure_time', 'arrival_time', 'day',
     'seats', 'fare', 'created_at', 'updated_at'
   ];
   protected $useTimestamps = true;
@@ -24,21 +24,10 @@ class BusModel extends Model
     return $this->where(['id' => $id])->first();
   }
 
-  public function getBusesByFilters($departure_date, $source, $destination)
+  public function getBusesByFilters($source, $destination)
   {
     $results = $this->where(['source' => $source, 'destination' => $destination])->findAll();
-    $filtered_results = [];
-    foreach ($results as $result) {
-      if (date('Y-m-d', strtotime($result['departure_time'])) == $departure_date) {
-        array_push($filtered_results, $result);
-      }
-    }
-    return $filtered_results;
-  }
-
-  public function getBusesByDepartureTime($departure_time)
-  {
-    return $this->where(['departure_time' => $departure_time])->findAll();
+    return $results;
   }
 
   public function createBus($data)

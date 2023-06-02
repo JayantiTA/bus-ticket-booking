@@ -42,6 +42,10 @@ class Buses extends Migration
                 'type' => 'INT',
                 'constraint' => 11,
             ],
+            'day' => [
+                'type' => 'INT',
+                'constraint' => 11,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

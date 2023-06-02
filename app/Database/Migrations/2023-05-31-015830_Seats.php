@@ -22,11 +22,6 @@ class Seats extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'status' => [
-                'type' => 'ENUM',
-                'constraint' => ['available', 'booked'],
-                'default' => 'available',
-            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

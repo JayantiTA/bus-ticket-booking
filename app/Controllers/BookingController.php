@@ -30,6 +30,38 @@ class BookingController extends BaseController
     return $this->response->setJSON($bookings);
   }
 
+  public function getBookingsPage()
+  {
+    $user_id = $this->session->get('user_id');
+    if ($user_id) {
+      $bookings = $this->bookingModel->getBookingsByUserId($user_id);
+      $data = [
+        'success' => true,
+        'bookings' => $bookings
+      ];
+
+      return view('bookings', $data);
+    }
+    return view('errors/html/error_404', [
+      'message' => 'Permission denied'
+    ]);
+  }
+
+  public function createBookingPage($bus_id)
+  {
+    $date = $_POST['date'];
+    $seat_id = $_POST['seat_id'];
+
+    $bus_data = $this->busModel->getBus($bus_id);
+    $seat_data = $this->seatModel->getSeat($seat_id);
+
+    return view('payment', [
+      'date' => $date,
+      'bus_data' => $bus_data,
+      'seat_data' => $seat_data,
+    ]);
+  }
+
   public function getBooking($id)
   {
     $bookings = $this->bookingModel->getBooking($id);

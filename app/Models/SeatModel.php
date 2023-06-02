@@ -8,7 +8,7 @@ class SeatModel extends Model
 {
   protected $table = 'seats';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['bus_id', 'seat_position', 'status', 'created_at', 'updated_at'];
+  protected $allowedFields = ['bus_id', 'seat_position', 'created_at', 'updated_at'];
   protected $useTimestamps = true;
 
   public function getSeats()
@@ -19,11 +19,6 @@ class SeatModel extends Model
   public function getSeatsByBusId($bus_id)
   {
     return $this->where(['bus_id' => $bus_id])->findAll();
-  }
-
-  public function getSeatsByBusIdAndAvailable($bus_id)
-  {
-    return $this->where(['bus_id' => $bus_id, 'status' => 'available'])->findAll();
   }
 
   public function getSeatsByBusIdAndSeatPosition($bus_id, $seat_position)

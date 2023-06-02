@@ -9,7 +9,7 @@ class BookingModel extends Model
   protected $table = 'bookings';
   protected $primaryKey = 'id';
   protected $allowedFields = [
-    'bus_id', 'user_id', 'seat_id', 'status'
+    'bus_id', 'user_id', 'seat_id', 'departure_date', 'status'
   ];
   protected $useTimestamps = true;
 
@@ -21,6 +21,11 @@ class BookingModel extends Model
   public function getBookingsByUserId($user_id)
   {
     return $this->where(['user_id' => $user_id])->findAll();
+  }
+
+  public function getBookingsByBusIdAndDate($bus_id, $departure_date)
+  {
+    return $this->where(['bus_id' => $bus_id, 'departure_date' => $departure_date, 'status' => 'approved'])->findAll();
   }
 
   public function getBooking($id)

@@ -7,11 +7,11 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="<?= base_url('discover') ?>">Home</a>
         </li>
         <?php if (session()->has('email')) : ?>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/bookings">My Bookings</a>
+            <a class="nav-link active" aria-current="page" href="<?= base_url('bookings') ?>">My Bookings</a>
           </li>
         <?php endif; ?>
         <li class="nav-item">
