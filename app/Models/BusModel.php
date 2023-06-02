@@ -10,7 +10,7 @@ class BusModel extends Model
   protected $primaryKey = 'id';
   protected $allowedFields = [
     'name', 'source', 'destination', 'departure_time', 'arrival_time',
-    'seats', 'available_seats', 'fare', 'created_at', 'updated_at'
+    'seats', 'fare', 'created_at', 'updated_at'
   ];
   protected $useTimestamps = true;
 

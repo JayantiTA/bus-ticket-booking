@@ -27,11 +27,11 @@ class Buses extends Migration
                 'constraint' => 255,
             ],
             'departure_time' => [
-                'type' => 'DATETIME',
+                'type' => 'TIME',
                 'null' => true,
             ],
             'arrival_time' => [
-                'type' => 'DATETIME',
+                'type' => 'TIME',
                 'null' => true,
             ],
             'seats' => [

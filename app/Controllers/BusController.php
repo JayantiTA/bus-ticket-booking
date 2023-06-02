@@ -23,8 +23,14 @@ class BusController extends BaseController
 
   public function getBuses()
   {
-    $buses = $this->busModel->getBuses();
-    return $this->response->setJSON($buses);
+    $data['buses'] = $this->busModel->getBuses();
+    if ($this->session->get('role_id') == 'admin') {
+      $data['success'] = $this->session->getFlashdata('success');
+      $data['message'] = $this->session->getFlashdata('message');
+      $this->session->remove('success');
+      $this->session->remove('message');
+    }
+    return view('admin/bus', $data);
   }
 
   public function getBus($id)
@@ -67,28 +73,47 @@ class BusController extends BaseController
     return view('available_buses', $data);
   }
 
+  public function createBus()
+  {
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
+    $this->busModel->createBus($_POST);
+    return redirect()->to('/admin/bus')->with('success', true)->with('message', 'Create Bus Success');
+  }
+
   public function updateBus($id)
   {
-    $data = $this->request->getJSON();
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $bus = $this->busModel->getBus($id);
     if ($bus) {
-      $this->busModel->updateBus($id, $data);
-      $updatedBus = $this->busModel->getBus($id);
-      return $this->response->setJSON($updatedBus);
-    } else {
-      return $this->response->setJSON(['message' => 'Bus not found']);
+      $this->busModel->updateBus($id, $_POST);
+      return redirect()->to('/admin/bus')->with('success', true)->with('message', 'Update Bus Success');
     }
+    return redirect()->to('/admin/bus')->with('success', true)->with('message', 'Update Bus Failed');
   }
 
   public function deleteBus($id)
   {
-    $data = $this->request->getJSON();
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $bus = $this->busModel->getBus($id);
     if ($bus) {
       $this->busModel->deleteBus($id);
-      return $this->response->setJSON(['message' => 'Bus deleted successfully']);
-    } else {
-      return $this->response->setJSON(['message' => 'Bus not found']);
+      return redirect()->to('/admin/bus')->with('success', true)->with('message', 'Delete Bus Success');
     }
+    return redirect()->to('/admin/bus')->with('success', true)->with('message', 'Delete Bus Failed');
   }
 }

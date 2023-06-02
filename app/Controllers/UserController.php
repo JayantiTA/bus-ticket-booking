@@ -98,6 +98,8 @@ class UserController extends BaseController
     $data['users'] = $users;
     $data['success'] = $this->session->getFlashdata('success');
     $data['message'] = $this->session->getFlashdata('message');
+    $this->session->remove('success');
+    $this->session->remove('message');
     return view('admin/user', $data);
   }
 

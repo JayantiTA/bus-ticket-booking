@@ -44,6 +44,11 @@ $routes->get('admin/user', 'UserController::getUsers');
 $routes->post('admin/user/create', 'UserController::createUser');
 $routes->post('admin/user/update/(:num)', 'UserController::updateUser/$1');
 $routes->post('admin/user/delete/(:num)', 'UserController::deleteUser/$1');
+
+$routes->get('admin/bus', 'BusController::getBuses');
+$routes->post('admin/bus/create', 'BusController::createBus');
+$routes->post('admin/bus/update/(:num)', 'BusController::updateBus/$1');
+$routes->post('admin/bus/delete/(:num)', 'BusController::deleteBus/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
