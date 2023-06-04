@@ -24,19 +24,32 @@ class BookingController extends BaseController
     $this->busModel = new BusModel();
   }
 
-  public function getBookings()
-  {
-    $bookings = $this->bookingModel->getBookings();
-    return $this->response->setJSON($bookings);
-  }
-
   public function getBookingsPage()
   {
     $user_id = $this->session->get('user_id');
     if ($user_id) {
+      $data['success'] = $this->session->getFlashdata('success');
+      $data['message'] = $this->session->getFlashdata('message');
+      $this->session->remove('success');
+      $this->session->remove('message');
+
       $bookings = $this->bookingModel->getBookingsByUserId($user_id);
+
+      for ($i = 0; $i < count($bookings); $i++) {
+        $bus = $this->busModel->getBus($bookings[$i]['bus_id']);
+
+        // change format
+        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $bookings[$i]['departure_date']);
+        $bookings[$i]['departure_date'] = $date->format('d F Y');
+        $bus['fare'] = 'Rp. ' . number_format($bus['fare'], 0, ',', '.');
+        $bus['departure_time'] = \DateTime::createFromFormat('H:i:s', $bus['departure_time'])->format('H:i');
+        $bus['arrival_time'] = \DateTime::createFromFormat('H:i:s', $bus['arrival_time'])->format('H:i');
+        $bus['arrival_date'] = $date->modify('+' . $bus['day'] . ' day')->format('d F Y');
+
+        $bookings[$i]['bus'] = $bus;
+      }
+
       $data = [
-        'success' => true,
         'bookings' => $bookings
       ];
 
@@ -47,10 +60,11 @@ class BookingController extends BaseController
     ]);
   }
 
-  public function createBookingPage($bus_id)
+  public function getBookingPage()
   {
-    $date = $_POST['date'];
-    $seat_id = $_POST['seat_id'];
+    $date = $this->request->getVar('date');
+    $seat_id = $this->request->getVar('seat_id');
+    $bus_id = $this->request->getVar('bus_id');
 
     $bus_data = $this->busModel->getBus($bus_id);
     $seat_data = $this->seatModel->getSeat($seat_id);
@@ -62,14 +76,53 @@ class BookingController extends BaseController
     ]);
   }
 
+  public function createBooking()
+  {
+    $bus_id = $_POST['bus_id'];
+    $user_id = $this->session->get('user_id');
+    $seat_id = $_POST['seat_id'];
+    $departure_date = $_POST['departure_date'];
+
+    $attachment = $this->request->getFile('attachment');
+    $attachment_name = $user_id . '_' . $attachment->getName();
+    $attachment->move(WRITEPATH . 'uploads', $attachment_name);
+
+    $data = [
+      'bus_id' => $bus_id,
+      'user_id' => $user_id,
+      'seat_id' => $seat_id,
+      'departure_date' => $departure_date,
+      'image_path' => $attachment_name
+    ];
+
+    $this->bookingModel->createBooking($data);
+    return redirect()->to('/bookings')->with('success', true)->with('message', 'Book Success');
+  }
+
+  public function getBookings()
+  {
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+    $data['bookings'] = $this->bookingModel->getBookings();
+    $data['success'] = $this->session->getFlashdata('success');
+    $data['message'] = $this->session->getFlashdata('message');
+    $this->session->remove('success');
+    $this->session->remove('message');
+
+    return view('admin/book', $data);
+  }
+
+
   public function getBooking($id)
   {
-    $bookings = $this->bookingModel->getBooking($id);
-    if ($bookings) {
-      return $this->response->setJSON($bookings);
-    } else {
-      return $this->response->setJSON(['message' => 'Booking not found']);
+    $booking = $this->bookingModel->getBooking($id);
+    if ($booking) {
+      return $this->response->setJSON($booking);
     }
+    return $this->response->setJSON(['message' => 'Bus not found']);
   }
 
   public function getBookingsByUserId($id)
@@ -88,25 +141,33 @@ class BookingController extends BaseController
 
   public function updateBooking($id)
   {
-    $data = $this->request->getJSON();
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $booking = $this->bookingModel->getBooking($id);
     if ($booking) {
-      $this->bookingModel->updateBooking($id, $data);
-      $updatedBooking = $this->bookingModel->getBooking($id);
-      return $this->response->setJSON($updatedBooking);
-    } else {
-      return $this->response->setJSON(['message' => 'Booking not found']);
+      $this->bookingModel->updateBooking($id, $_POST);
+      return redirect()->to('/admin/book')->with('success', true)->with('message', 'Update Booking Success');
     }
+    return redirect()->to('/admin/book')->with('success', true)->with('message', 'Update Booking Failed');
   }
 
   public function deleteBooking($id)
   {
-    $bookings = $this->bookingModel->getBooking($id);
-    if ($bookings) {
-      $this->bookingModel->deleteBooking($id);
-      return $this->response->setJSON(['message' => 'Booking deleted successfully']);
-    } else {
-      return $this->response->setJSON(['message' => 'Booking not found']);
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
     }
+
+    $booking = $this->bookingModel->getBooking($id);
+    if ($booking) {
+      $this->bookingModel->deleteBooking($id);
+      return redirect()->to('/admin/book')->with('success', true)->with('message', 'Delete Booking Success');
+    }
+    return redirect()->to('/admin/book')->with('success', true)->with('message', 'Delete Booking Failed');
   }
 }

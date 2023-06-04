@@ -37,10 +37,10 @@ class UserController extends BaseController
         'role_id' => $user['role_id'],
       ]);
       unset($user['password']);
-      return view('discover', [
-        'success' => true,
-        'message' => 'Login success',
-      ]);
+      if ($user['role_id'] == 'admin') {
+        return redirect()->to('admin/user')->with('success', true)->with('message', 'Login Success');
+      }
+      return redirect()->to('discover')->with('success', true)->with('message', 'Login Success');
     }
     return view('login', [
       'success' => false,
@@ -70,16 +70,12 @@ class UserController extends BaseController
         'message' => 'Register success'
       ];
     }
-    return view('register', $data);
+    return view('login', $data);
   }
 
   public function logoutUser()
   {
     $this->session->destroy();
-    $data = [
-      'success' => true,
-      'message' => 'User logged out'
-    ];
     return redirect()->to('/discover')->with('success', true)->with('message', 'Logout Success');
   }
 

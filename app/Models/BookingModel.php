@@ -9,7 +9,7 @@ class BookingModel extends Model
   protected $table = 'bookings';
   protected $primaryKey = 'id';
   protected $allowedFields = [
-    'bus_id', 'user_id', 'seat_id', 'departure_date', 'status'
+    'bus_id', 'user_id', 'seat_id', 'departure_date', 'status', 'image_path'
   ];
   protected $useTimestamps = true;
 

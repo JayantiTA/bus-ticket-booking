@@ -9,8 +9,9 @@
     </div>
 
     <?= $this->include('navbar') ?>
-    <form action="<?= base_url('book/' . $bus_id) ?>" method="POST">
+    <form action="<?= base_url('book') ?>" method="GET">
       <input type="hidden" name="date" class="form-control" id="date" value="<?= $date ?>">
+      <input type="hidden" name="bus_id" class="form-control" id="bus_id" value="<?= $bus_id ?>">
       <div class="position-relative" style="height: 100vh; overflow-y: scroll;">
         <div class="container shadow my-5 p-3" style="max-width: 800px; min-height:100vh; background-color: #F8F9FA; border-radius: 15px;">
           <div class="row justify-content-center">

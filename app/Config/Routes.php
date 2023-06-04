@@ -39,11 +39,11 @@ $routes->get('/login', 'UserController::loginPage');
 $routes->post('/login', 'UserController::loginUser');
 $routes->get('/logout', 'UserController::logoutUser');
 
-$routes->get('/discover', 'BusController::searchPage');
-$routes->post('/discover', 'BusController::searchBuses');
-$routes->post('/seats/(:num)', 'SeatController::getSeatsPage/$1');
-$routes->post('/book/(:num)', 'BookingController::createBookingPage/$1');
-$routes->post('/pay/(:num)', 'BookingController::createBooking/$1');
+$routes->get('discover', 'BusController::searchPage');
+$routes->get('buses', 'BusController::searchBuses');
+$routes->get('seats', 'SeatController::getSeatsPage');
+$routes->get('book', 'BookingController::getBookingPage');
+$routes->post('pay', 'BookingController::createBooking');
 $routes->get('bookings', 'BookingController::getBookingsPage');
 
 $routes->get('admin/user', 'UserController::getUsers');
@@ -55,6 +55,16 @@ $routes->get('admin/bus', 'BusController::getBuses');
 $routes->post('admin/bus/create', 'BusController::createBus');
 $routes->post('admin/bus/update/(:num)', 'BusController::updateBus/$1');
 $routes->post('admin/bus/delete/(:num)', 'BusController::deleteBus/$1');
+
+$routes->get('admin/seat', 'SeatController::getSeats');
+$routes->post('admin/seat/create', 'SeatController::createSeat');
+$routes->post('admin/seat/update/(:num)', 'SeatController::updateSeat/$1');
+$routes->post('admin/seat/delete/(:num)', 'SeatController::deleteSeat/$1');
+
+$routes->get('admin/book', 'BookingController::getBookings');
+$routes->post('admin/book/create', 'BookingController::createBooking');
+$routes->post('admin/book/update/(:num)', 'BookingController::updateBooking/$1');
+$routes->post('admin/book/delete/(:num)', 'BookingController::deleteBooking/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

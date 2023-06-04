@@ -25,8 +25,9 @@
           </div>
           <!-- <?php foreach ($buses as $bus) : ?> -->
           <div class="container-sm shadow" style="max-width: 800px; background-color: #F8F9FA; border-radius: 15px;">
-            <form action="<?= base_url('seats/' . $bus['id']) ?>" method="POST">
+            <form action="<?= base_url('seats') ?>" method="GET">
               <input type="hidden" name="date" class="form-control" id="date" value="<?= $date ?>">
+              <input type="hidden" name="bus_id" class="form-control" id="bus_id" value="<?= $bus['id'] ?>">
               <div class="row m-3">
                 <div class="col-4 my-3">
                   <h2>

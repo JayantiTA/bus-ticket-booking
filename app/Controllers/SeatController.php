@@ -21,36 +21,20 @@ class SeatController extends BaseController
     $this->seatModel = new SeatModel();
   }
 
-  public function getSeats()
-  {
-    $users = $this->seatModel->getSeats();
-    return $this->response->setJSON($users);
-  }
-
-
-  public function getSeat($id)
-  {
-    $seat = $this->seatModel->getSeat($id);
-    if ($seat) {
-      return $this->response->setJSON($seat);
-    } else {
-      return $this->response->setJSON(['message' => 'Seat not found']);
-    }
-  }
-
-  public function getSeatsPage($id)
+  public function getSeatsPage()
   {
     if (!$this->session->get('user_id')) {
       return view('login');
     }
-    $date = $_POST['date'];
-    $seats = $this->seatModel->getSeatsByBusId($id);
-    $bookings = $this->bookingModel->getBookingsByBusIdAndDate($id, $date);
+    $bus_id = $this->request->getVar('bus_id');
+    $date = $this->request->getVar('date');
+    $seats = $this->seatModel->getSeatsByBusId($bus_id);
+    $bookings = $this->bookingModel->getBookingsByBusIdAndDate($bus_id, $date);
     $available_seats = [];
     $booked_seat_ids = [];
 
     foreach ($bookings as $booking) {
-      array_push($booked_seat_ids, $booking['id']);
+      array_push($booked_seat_ids, $booking['seat_id']);
     }
 
     for ($i = 0; $i < count($seats); $i++) {
@@ -61,35 +45,72 @@ class SeatController extends BaseController
 
     $data = [
       'success' => true,
-      'bus_id' => $id,
+      'bus_id' => $bus_id,
       'date' => $date,
       'seats' => $available_seats
     ];
     return view('book_seat', $data);
   }
 
+  public function getSeats()
+  {
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
+    $seats = $this->seatModel->getSeats();
+
+    $data['seats'] = $seats;
+    $data['success'] = $this->session->getFlashdata('success');
+    $data['message'] = $this->session->getFlashdata('message');
+    $this->session->remove('success');
+    $this->session->remove('message');
+    return view('admin/seat', $data);
+  }
+
+  public function createSeat()
+  {
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
+    $this->seatModel->createSeat($_POST);
+    return redirect()->to('/admin/seat')->with('success', true)->with('message', 'Create Seat Success');
+  }
+
   public function updateSeat($id)
   {
-    $data = $this->request->getJSON();
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $seat = $this->seatModel->getSeat($id);
     if ($seat) {
-      $this->seatModel->updateSeat($id, $data);
-      $updatedSeat = $this->seatModel->getSeat($id);
-      return $this->response->setJSON($updatedSeat);
-    } else {
-      return $this->response->setJSON(['message' => 'Seat not found']);
+      $this->seatModel->updateSeat($id, $_POST);
+      return redirect()->to('/admin/seat')->with('success', true)->with('message', 'Update Seat Success');
     }
+    return redirect()->to('/admin/seat')->with('success', false)->with('message', 'Update Seat Failed');
   }
 
   public function deleteSeat($id)
   {
-    $data = $this->request->getJSON();
+    if ($this->session->get('role_id') != 'admin') {
+      return view('errors/html/error_404', [
+        'message' => 'Permission denied'
+      ]);
+    }
+
     $seat = $this->seatModel->getSeat($id);
     if ($seat) {
       $this->seatModel->deleteSeat($id);
-      return $this->response->setJSON(['message' => 'Seat deleted']);
-    } else {
-      return $this->response->setJSON(['message' => 'Seat not found']);
+      return redirect()->to('/admin/seat')->with('success', true)->with('message', 'Delete Seat Success');
     }
+    return redirect()->to('/admin/seat')->with('success', false)->with('message', 'Delete Seat Failed');
   }
 }

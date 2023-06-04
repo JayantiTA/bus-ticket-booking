@@ -3,8 +3,9 @@
 <?= $this->section('content') ?>
 
 <body>
+    <?= $this->include('navbar') ?>
     <div class="container">
-        <h1 class="text-center">Users Table</h1>
+        <h1 class="text-center my-3">Users Table</h1>
         <?php if (isset($success)) : ?>
             <div class="alert alert-dismissible alert-<?php echo $success ? "success" : "danger" ?> " role="alert">
                 <?php echo $message ?>

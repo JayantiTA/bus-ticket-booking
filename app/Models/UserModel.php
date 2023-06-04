@@ -28,7 +28,11 @@ class UserModel extends Model
 
   public function createUser($data)
   {
-    return $this->insert($data);
+    $inserted_user = $this->insert($data);
+    if ($inserted_user) {
+      return $this->getUser($this->getInsertID());
+    }
+    return;
   }
 
   public function updateUser($id, $data)

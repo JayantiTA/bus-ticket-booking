@@ -43,9 +43,8 @@ class BusController extends BaseController
     if ($bus) {
       $bus->seats_position = $seats;
       return $this->response->setJSON($bus);
-    } else {
-      return $this->response->setJSON(['message' => 'Bus not found']);
     }
+    return $this->response->setJSON(['message' => 'Bus not found']);
   }
 
   public function searchPage()
@@ -55,9 +54,9 @@ class BusController extends BaseController
 
   public function searchBuses()
   {
-    $departure_date = $_POST['departure_date'];
-    $departure_city = $_POST['departure_city'];
-    $destination_city = $_POST['destination_city'];
+    $departure_date =  $this->request->getVar('departure_date');
+    $departure_city =  $this->request->getVar('departure_city');
+    $destination_city =  $this->request->getVar('destination_city');
     $buses = $this->busModel->getBusesByFilters($departure_city, $destination_city);
     $filtered_buses = [];
     $date = \DateTime::createFromFormat('Y-m-d', $departure_date);
@@ -79,6 +78,7 @@ class BusController extends BaseController
       'date' => $departure_date,
       'buses' => $buses
     ];
+
     return view('available_buses', $data);
   }
 

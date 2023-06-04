@@ -6,7 +6,7 @@ class Home extends BaseController
 {
     public function index()
     {
-        return view('bookings');
+        return view('discover');
     }
 
     public function contactPage()

@@ -7,7 +7,7 @@
   <?= $this->include('navbar') ?>
 
   <div class="container-sm position-absolute top-50 start-50 translate-middle shadow" style="max-width: 800px; background-color: #F8F9FA; border-radius: 15px;">
-    <form action="<?= base_url('discover') ?>" method="POST">
+    <form action="<?= base_url('buses') ?>" method="GET">
       <div class="row justify-content-center m-3">
         <div class="col-6">
           <div class=" my-3">
@@ -33,5 +33,20 @@
   </div>
 
   <!-- SCRIPTS -->
+
+  <script>
+    // Get the current date
+    var currentDate = new Date();
+
+    // Format the current date as yyyy-mm-dd
+    var year = currentDate.getFullYear();
+    var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    var day = currentDate.getDate().toString().padStart(2, '0');
+    var formattedDate = `${year}-${month}-${day}`;
+
+    // Set the minimum date to today
+    var dateInput = document.getElementById('departure_date');
+    dateInput.min = formattedDate;
+  </script>
 
   <?= $this->endSection() ?>

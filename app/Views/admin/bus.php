@@ -5,8 +5,9 @@
 <?= $this->section('content') ?>
 
 <body>
+    <?= $this->include('navbar') ?>
     <div class="container">
-        <h1 class="text-center">Buses Table</h1>
+        <h1 class="text-center my-3">Buses Table</h1>
         <?php if (isset($success)) : ?>
             <div class="alert alert-dismissible alert-<?php echo $success ? "success" : "danger" ?> " role="alert">
                 <?php echo $message ?>
@@ -57,6 +58,10 @@
                                 <label for="fare" class="form-label">Fare</label>
                                 <input type="number" name="fare" class="form-control" id="fare" placeholder="1000">
                             </div>
+                            <div class="mb-3">
+                                <label for="day" class="form-label">Day</label>
+                                <input type="number" name="day" class="form-control" id="day" placeholder="1">
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -80,6 +85,7 @@
                         <th scope="col">Arrival Time</th>
                         <th scope="col">Seats</th>
                         <th scope="col">Fare</th>
+                        <th scope="col">Day</th>
                         <th scope="col">Created At</th>
                         <th scope="col">Updated At</th>
                         <th scope="col">Action</th>
@@ -96,6 +102,7 @@
                             <td><?= $bus['arrival_time'] ?></td>
                             <td><?= $bus['seats'] ?></td>
                             <td><?= $bus['fare'] ?></td>
+                            <td><?= $bus['day'] ?></td>
                             <td><?= $bus['created_at'] ?></td>
                             <td><?= $bus['updated_at'] ?></td>
                             <td>
@@ -140,6 +147,10 @@
                                                     <div class="mb-3">
                                                         <label for="fare" class="form-label">Fare</label>
                                                         <input type="number" name="fare" class="form-control" id="fare" placeholder="1000" value="<?= $bus['fare'] ?>">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="day" class="form-label">Day</label>
+                                                        <input type="number" name="day" class="form-control" id="day" placeholder="1" value="<?= $bus['day'] ?>">
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
