@@ -79,7 +79,7 @@
                   </h5>
                   <p>
                     <?php
-                    echo $booking['bus']['arrival_time']
+                    echo $booking['bus']['arrival_date']
                     ?>
                   </p>
                 </div>

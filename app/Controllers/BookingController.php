@@ -41,7 +41,6 @@ class BookingController extends BaseController
         // change format
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $bookings[$i]['departure_date']);
         $bookings[$i]['departure_date'] = $date->format('d F Y');
-        $bus['fare'] = 'Rp. ' . number_format($bus['fare'], 0, ',', '.');
         $bus['departure_time'] = \DateTime::createFromFormat('H:i:s', $bus['departure_time'])->format('H:i');
         $bus['arrival_time'] = \DateTime::createFromFormat('H:i:s', $bus['arrival_time'])->format('H:i');
         $bus['arrival_date'] = $date->modify('+' . $bus['day'] . ' day')->format('d F Y');
